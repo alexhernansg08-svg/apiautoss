@@ -22,5 +22,12 @@ public interface AutoRepository extends JpaRepository<Auto, String> {
     @Query("SELECT a FROM Auto a WHERE a.precio > :precioMinimo")
     List<Auto> findAutosByPrecioMayorA(@Param("precioMinimo") Double precio);
     
+    List<Auto> findByModelo(Integer modelo);
+    
+    List<Auto> findByModeloLessThan(Integer anio);
+    
+    @Query("SELECT a FROM Auto a JOIN a.marca m WHERE m.pais = :paisMarca")
+    List<Auto> findAutosByMarcaPais(@Param("paisMarca") String pais);
+    
 
 }

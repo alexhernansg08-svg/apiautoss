@@ -59,4 +59,48 @@ public class AutoController {
         List<Auto> autos = autoRepository.findAutosByPrecioMayorA(varprecio);
         return new ResponseEntity<>(autos, HttpStatus.OK);
     }
+    
+    /**
+     * ✅ Nuevo Método 1: GET http://localhost:8080/api/autos/modelo/{modelo}
+     * Descripción: Visualizar una lista de autos filtrados por el Modelo (año) exacto.
+     */
+    @GetMapping("/autos/modelo/{modelo}")
+    public ResponseEntity<List<Auto>> getAutosByModelo(@PathVariable Integer modelo) {
+        // Asumiendo que el campo 'Modelo' es el año (Int) según la estructura.
+        List<Auto> autos = autoRepository.findByModelo(modelo);
+        if (autos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(autos, HttpStatus.OK);
+    }
+
+
+    /**
+     * ✅ Nuevo Método 2: GET http://localhost:8080/api/autos/modelomenora/{anio}
+     * Descripción: Visualizar una lista de autos cuyo Modelo (año) es menor al valor proporcionado.
+     */
+    @GetMapping("/autos/modelomenora/{anio}")
+    public ResponseEntity<List<Auto>> getAutosByModeloMenorA(@PathVariable Integer anio) {
+        // Se usará un método personalizado con la convención de Spring Data JPA
+        List<Auto> autos = autoRepository.findByModeloLessThan(anio);
+        if (autos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(autos, HttpStatus.OK);
+    }
+
+
+    /**
+     * ✅ Nuevo Método 3: GET http://localhost:8080/api/autos/pais/{pais}
+ 
+     */
+    @GetMapping("/autos/pais/{pais}")
+    public ResponseEntity<List<Auto>> getAutosByMarcaPais(@PathVariable String pais) {
+        // Requiere un método personalizado en el Repositorio que use la relación Auto-Marca.
+        List<Auto> autos = autoRepository.findAutosByMarcaPais(pais);
+        if (autos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(autos, HttpStatus.OK);
+    }
 }
