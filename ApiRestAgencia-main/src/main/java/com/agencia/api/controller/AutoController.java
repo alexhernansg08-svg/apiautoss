@@ -11,27 +11,29 @@ import com.agencia.api.repository.AutoRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/api")
 public class AutoController {
 
     @Autowired
     private AutoRepository autoRepository;
 
-    /**
-     * DELETE http://localhost:8080/api/auto/{NoSerie}
-     */
-    @DeleteMapping("/auto/{NoSerie}")
-    public ResponseEntity<Void> deleteAuto(@PathVariable String NoSerie) {
-        if (!autoRepository.existsById(NoSerie)) {
+    // ============================================================
+    //  DELETE AUTO POR NO_SERIE
+    // ============================================================
+
+    @DeleteMapping("/auto/{noSerie}")
+    public ResponseEntity<Void> deleteAuto(@PathVariable String noSerie) {
+        if (!autoRepository.existsById(noSerie)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        autoRepository.deleteById(NoSerie);
+        autoRepository.deleteById(noSerie);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /**
-     *POST http://localhost:8080/api/auto
-     */
+    // ============================================================
+    //  CREAR AUTO
+    // ============================================================
+
     @PostMapping("/auto")
     public ResponseEntity<Auto> createAuto(@RequestBody Auto auto) {
         try {
@@ -42,65 +44,66 @@ public class AutoController {
         }
     }
 
-    /**
-     * GET http://localhost:8080/api/autos/marca/{nombre}
-     */
+    // ============================================================
+    //  BUSCAR AUTOS POR NOMBRE DE MARCA
+    // ============================================================
+
     @GetMapping("/autos/marca/{nombre}")
     public ResponseEntity<List<Auto>> getAutosByMarca(@PathVariable String nombre) {
         List<Auto> autos = autoRepository.findAutosByMarcaNombre(nombre);
-        return new ResponseEntity<>(autos, HttpStatus.OK);
+        return autos.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(autos, HttpStatus.OK);
     }
 
-    /**
-     *GET http://localhost:8080/api/autos/precio/{varprecio}
-     */
-    @GetMapping("/autos/precio/{varprecio}")
-    public ResponseEntity<List<Auto>> getAutosByPrecioMayorA(@PathVariable Double varprecio) {
-        List<Auto> autos = autoRepository.findAutosByPrecioMayorA(varprecio);
-        return new ResponseEntity<>(autos, HttpStatus.OK);
+    // ============================================================
+    //  BUSCAR AUTOS POR PRECIO MAYOR A
+    // ============================================================
+
+    @GetMapping("/autos/precio/mayor/{precio}")
+    public ResponseEntity<List<Auto>> getAutosByPrecioMayorA(@PathVariable Double precio) {
+        List<Auto> autos = autoRepository.findAutosByPrecioMayorA(precio);
+        return autos.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(autos, HttpStatus.OK);
     }
-    
-    /**
-     * ✅ Nuevo Método 1: GET http://localhost:8080/api/autos/modelo/{modelo}
-     * Descripción: Visualizar una lista de autos filtrados por el Modelo (año) exacto.
-     */
+
+    // ============================================================
+    //  NUEVO 1: BUSCAR AUTOS POR MODELO EXACTO
+    //  GET /api/autos/modelo/2024
+    // ============================================================
+
     @GetMapping("/autos/modelo/{modelo}")
     public ResponseEntity<List<Auto>> getAutosByModelo(@PathVariable Integer modelo) {
-        // Asumiendo que el campo 'Modelo' es el año (Int) según la estructura.
         List<Auto> autos = autoRepository.findByModelo(modelo);
-        if (autos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(autos, HttpStatus.OK);
+        return autos.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(autos, HttpStatus.OK);
     }
 
+    // ============================================================
+    //  NUEVO 2: BUSCAR AUTOS DONDE MODELO SEA MENOR A X
+    //  GET /api/autos/modelo/menor/2025
+    // ============================================================
 
-    /**
-     * ✅ Nuevo Método 2: GET http://localhost:8080/api/autos/modelomenora/{anio}
-     * Descripción: Visualizar una lista de autos cuyo Modelo (año) es menor al valor proporcionado.
-     */
-    @GetMapping("/autos/modelomenora/{anio}")
+    @GetMapping("/autos/modelo/menor/{anio}")
     public ResponseEntity<List<Auto>> getAutosByModeloMenorA(@PathVariable Integer anio) {
-        // Se usará un método personalizado con la convención de Spring Data JPA
         List<Auto> autos = autoRepository.findByModeloLessThan(anio);
-        if (autos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(autos, HttpStatus.OK);
+        return autos.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(autos, HttpStatus.OK);
     }
 
+    // ============================================================
+    //  NUEVO 3: BUSCAR AUTOS POR PAÍS DE LA MARCA
+    //  GET /api/autos/pais/EEUU
+    // ============================================================
 
-    /**
-     * ✅ Nuevo Método 3: GET http://localhost:8080/api/autos/pais/{pais}
- 
-     */
     @GetMapping("/autos/pais/{pais}")
     public ResponseEntity<List<Auto>> getAutosByMarcaPais(@PathVariable String pais) {
-        // Requiere un método personalizado en el Repositorio que use la relación Auto-Marca.
         List<Auto> autos = autoRepository.findAutosByMarcaPais(pais);
-        if (autos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(autos, HttpStatus.OK);
+        return autos.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(autos, HttpStatus.OK);
     }
 }

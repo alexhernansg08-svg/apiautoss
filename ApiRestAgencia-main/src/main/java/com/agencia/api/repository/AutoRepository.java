@@ -10,24 +10,32 @@ import java.util.List;
 @Repository
 public interface AutoRepository extends JpaRepository<Auto, String> {
 
+    /**
+     * Autos por nombre de la marca
+     */
+    @Query("SELECT a FROM Auto a JOIN a.marca m WHERE m.nombre = :nombre")
+    List<Auto> findAutosByMarcaNombre(@Param("nombre") String nombre);
 
     /**
-     *  autos filtrados por Marca
-     * 
+     * Autos por precio mayor al indicado
      */
-    @Query("SELECT a FROM Auto a JOIN a.marca m WHERE m.nombre = :nombreMarca")
-    List<Auto> findAutosByMarcaNombre(@Param("nombreMarca") String nombre);
-
-
-    @Query("SELECT a FROM Auto a WHERE a.precio > :precioMinimo")
-    List<Auto> findAutosByPrecioMayorA(@Param("precioMinimo") Double precio);
+    @Query("SELECT a FROM Auto a WHERE a.precio > :precio")
+    List<Auto> findAutosByPrecioMayorA(@Param("precio") Double precio);
     
+    /**
+     * Autos por modelo exacto
+     */
     List<Auto> findByModelo(Integer modelo);
-    
+
+    /**
+     * Autos donde modelo sea menor a un valor
+     */
     List<Auto> findByModeloLessThan(Integer anio);
-    
-    @Query("SELECT a FROM Auto a JOIN a.marca m WHERE m.pais = :paisMarca")
-    List<Auto> findAutosByMarcaPais(@Param("paisMarca") String pais);
-    
+
+    /**
+     * Autos según país de la marca
+     */
+    @Query("SELECT a FROM Auto a JOIN a.marca m WHERE m.pais = :pais")
+    List<Auto> findAutosByMarcaPais(@Param("pais") String pais);
 
 }
