@@ -69,11 +69,11 @@ public class AutoController {
     }
 
     // ============================================================
-    //  NUEVO 1: BUSCAR AUTOS POR MODELO EXACTO
-    //  GET /api/autos/modelo/2024
+    //  NUEVO 1: BUSCAR AUTOS POR MODELO EXACTO (RUTA CORREGIDA)
+    //  GET /api/autos/modelo-exacto/2024
     // ============================================================
 
-    @GetMapping("/autos/modelo/{modelo}")
+    @GetMapping("/autos/modelo-exacto/{modelo}")
     public ResponseEntity<List<Auto>> getAutosByModelo(@PathVariable Integer modelo) {
         List<Auto> autos = autoRepository.findByModelo(modelo);
         return autos.isEmpty()
@@ -82,11 +82,11 @@ public class AutoController {
     }
 
     // ============================================================
-    //  NUEVO 2: BUSCAR AUTOS DONDE MODELO SEA MENOR A X
-    //  GET /api/autos/modelo/menor/2025
+    //  NUEVO 2: BUSCAR AUTOS DONDE MODELO SEA MENOR A X (RUTA CORREGIDA)
+    //  GET /api/autos/modelo-menor/2025
     // ============================================================
 
-    @GetMapping("/autos/modelo/menor/{anio}")
+    @GetMapping("/autos/modelo-menor/{anio}")
     public ResponseEntity<List<Auto>> getAutosByModeloMenorA(@PathVariable Integer anio) {
         List<Auto> autos = autoRepository.findByModeloLessThan(anio);
         return autos.isEmpty()
