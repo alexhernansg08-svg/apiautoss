@@ -11,7 +11,7 @@ import com.agencia.api.repository.AutoRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+// REMOVIDO: @RequestMapping("/api")
 public class AutoController {
 
     @Autowired
@@ -19,9 +19,10 @@ public class AutoController {
 
     // ============================================================
     //  DELETE AUTO POR NO_SERIE
+    //  AHORA ES: /api/auto/{noSerie}
     // ============================================================
 
-    @DeleteMapping("/auto/{noSerie}")
+    @DeleteMapping("/api/auto/{noSerie}")
     public ResponseEntity<Void> deleteAuto(@PathVariable String noSerie) {
         if (!autoRepository.existsById(noSerie)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -32,9 +33,10 @@ public class AutoController {
 
     // ============================================================
     //  CREAR AUTO
+    //  AHORA ES: /api/auto
     // ============================================================
 
-    @PostMapping("/auto")
+    @PostMapping("/api/auto")
     public ResponseEntity<Auto> createAuto(@RequestBody Auto auto) {
         try {
             Auto nuevoAuto = autoRepository.save(auto);
@@ -46,9 +48,10 @@ public class AutoController {
 
     // ============================================================
     //  BUSCAR AUTOS POR NOMBRE DE MARCA
+    //  AHORA ES: /api/autos/marca/{nombre}
     // ============================================================
 
-    @GetMapping("/autos/marca/{nombre}")
+    @GetMapping("/api/autos/marca/{nombre}")
     public ResponseEntity<List<Auto>> getAutosByMarca(@PathVariable String nombre) {
         List<Auto> autos = autoRepository.findAutosByMarcaNombre(nombre);
         return autos.isEmpty()
@@ -58,9 +61,10 @@ public class AutoController {
 
     // ============================================================
     //  BUSCAR AUTOS POR PRECIO MAYOR A
+    //  AHORA ES: /api/autos/precio/mayor/{precio}
     // ============================================================
 
-    @GetMapping("/autos/precio/mayor/{precio}")
+    @GetMapping("/api/autos/precio/mayor/{precio}")
     public ResponseEntity<List<Auto>> getAutosByPrecioMayorA(@PathVariable Double precio) {
         List<Auto> autos = autoRepository.findAutosByPrecioMayorA(precio);
         return autos.isEmpty()
@@ -70,10 +74,10 @@ public class AutoController {
 
     // ============================================================
     //  NUEVO 1: BUSCAR AUTOS POR MODELO EXACTO (RUTA CORREGIDA)
-    //  GET /api/autos/modelo-exacto/2024
+    //  AHORA ES: /api/autos/modelo-exacto/2024
     // ============================================================
 
-    @GetMapping("/autos/modelo-exacto/{modelo}")
+    @GetMapping("/api/autos/modelo-exacto/{modelo}")
     public ResponseEntity<List<Auto>> getAutosByModelo(@PathVariable Integer modelo) {
         List<Auto> autos = autoRepository.findByModelo(modelo);
         return autos.isEmpty()
@@ -83,10 +87,10 @@ public class AutoController {
 
     // ============================================================
     //  NUEVO 2: BUSCAR AUTOS DONDE MODELO SEA MENOR A X (RUTA CORREGIDA)
-    //  GET /api/autos/modelo-menor/2025
+    //  AHORA ES: /api/autos/modelo-menor/2025
     // ============================================================
 
-    @GetMapping("/autos/modelo-menor/{anio}")
+    @GetMapping("/api/autos/modelo-menor/{anio}")
     public ResponseEntity<List<Auto>> getAutosByModeloMenorA(@PathVariable Integer anio) {
         List<Auto> autos = autoRepository.findByModeloLessThan(anio);
         return autos.isEmpty()
@@ -96,10 +100,10 @@ public class AutoController {
 
     // ============================================================
     //  NUEVO 3: BUSCAR AUTOS POR PAÍS DE LA MARCA
-    //  GET /api/autos/pais/EEUU
+    //  AHORA ES: /api/autos/pais/EEUU
     // ============================================================
 
-    @GetMapping("/autos/pais/{pais}")
+    @GetMapping("/api/autos/pais/{pais}")
     public ResponseEntity<List<Auto>> getAutosByMarcaPais(@PathVariable String pais) {
         List<Auto> autos = autoRepository.findAutosByMarcaPais(pais);
         return autos.isEmpty()
